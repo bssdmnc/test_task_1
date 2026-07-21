@@ -1,0 +1,47 @@
+name: "benchmarks"
+
+on:
+  pull_request: ~
+  push: ~
+
+jobs:
+  unit-tests:
+    name: "benchmarks"
+
+    runs-on: ${{ matrix.operating-system }}
+
+    strategy:
+      matrix:
+        php-version:
+          - "8.5"
+        operating-system:
+          - "ubuntu-latest"
+
+    steps:
+      - name: "checkout"
+        uses: "actions/checkout@v6"
+
+      - name: "installing PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          ini-values: memory_limit=-1
+          tools: composer:v2, cs2pr
+          extensions: bcmath, mbstring, intl, sodium, json, brotli
+
+      - name: "caching dependencies"
+        uses: "actions/cache@v5"
+        with:
+          path: |
+            ~/.composer/cache
+            vendor
+          key: "php-${{ matrix.php-version }}"
+          restore-keys: "php-${{ matrix.php-version }}"
+
+      - uses: extractions/setup-just@v3
+
+      - name: "installing dependencies"
+        run: just install
+
+      - name: "running benchmarks"
+        run: just bench

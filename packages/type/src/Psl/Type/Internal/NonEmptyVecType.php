@@ -1,0 +1,170 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Psl\Type\Internal;
+
+use Override;
+use Psl\Type;
+use Psl\Type\Exception\AssertException;
+use Psl\Type\Exception\CoercionException;
+use Throwable;
+
+use function array_is_list;
+use function is_array;
+use function is_iterable;
+use function sprintf;
+
+/**
+ * @template Tv
+ *
+ * @extends Type\Type<non-empty-list<Tv>>
+ *
+ * @internal
+ *
+ * @mago-expect analysis:mixed-assignment
+ */
+final readonly class NonEmptyVecType extends Type\Type
+{
+    /**
+     * @psalm-mutation-free
+     *
+     * @param Type\TypeInterface<Tv> $valueType
+     */
+    public function __construct(
+        private readonly Type\TypeInterface $valueType,
+    ) {}
+
+    /**
+     * @psalm-assert-if-true non-empty-list<Tv> $value
+     */
+    #[Override]
+    public function matches(mixed $value): bool
+    {
+        if (!is_array($value)) {
+            return false;
+        }
+
+        if ([] === $value) {
+            return false;
+        }
+
+        $index = 0;
+        foreach ($value as $k => $v) {
+            if ($index !== $k) {
+                return false;
+            }
+
+            if (!$this->valueType->matches($v)) {
+                return false;
+            }
+
+            $index++;
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws CoercionException
+     *
+     * @return non-empty-list<Tv>
+     */
+    #[Override]
+    public function coerce(mixed $value): iterable
+    {
+        if (is_iterable($value)) {
+            /** @var Type\Type<Tv> $valueType */
+            $valueType = $this->valueType;
+
+            /**
+             * @var list<Tv> $entries
+             */
+            $result = [];
+
+            $i = null;
+            $v = null;
+            /** @var bool $iterating */
+            $iterating = true;
+
+            try {
+                /**
+                 * @var Tv $v
+                 * @var array-key $i
+                 */
+                foreach ($value as $i => $v) {
+                    $iterating = false;
+                    $result[] = $valueType->coerce($v);
+                    $iterating = true;
+                }
+                // @codeCoverageIgnoreStart
+            } catch (Throwable $e) {
+                throw match (true) {
+                    $iterating => CoercionException::withValue(
+                        null,
+                        $this->toString(),
+                        PathExpression::iteratorError($i),
+                        $e,
+                    ),
+                    default => CoercionException::withValue($v, $this->toString(), PathExpression::path($i), $e),
+                };
+                // @codeCoverageIgnoreEnd
+            }
+
+            if ([] === $result) {
+                throw CoercionException::withValue($value, $this->toString());
+            }
+
+            return $result;
+        }
+
+        throw CoercionException::withValue($value, $this->toString());
+    }
+
+    /**
+     * @throws AssertException
+     *
+     * @return non-empty-list<Tv>
+     *
+     * @psalm-assert non-empty-list<Tv> $value
+     */
+    #[Override]
+    public function assert(mixed $value): array
+    {
+        if (!is_array($value) || !array_is_list($value)) {
+            throw AssertException::withValue($value, $this->toString());
+        }
+
+        /** @var Type\Type<Tv> $valueType */
+        $valueType = $this->valueType;
+
+        $result = [];
+
+        $i = null;
+        $v = null;
+
+        try {
+            /**
+             * @var Tv $v
+             * @var array-key $i
+             */
+            foreach ($value as $i => $v) {
+                $result[] = $valueType->assert($v);
+            }
+        } catch (AssertException $e) {
+            throw AssertException::withValue($v, $this->toString(), PathExpression::path($i), $e);
+        }
+
+        if ([] === $result) {
+            throw AssertException::withValue($value, $this->toString());
+        }
+
+        return $result;
+    }
+
+    #[Override]
+    public function toString(): string
+    {
+        return sprintf('non-empty-vec<%s>', $this->valueType->toString());
+    }
+}

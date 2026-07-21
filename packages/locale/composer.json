@@ -1,0 +1,49 @@
+{
+    "name": "php-standard-library/locale",
+    "description": "Backed enum with 700+ locale identifiers for type-safe internationalization",
+    "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "locale",
+        "i18n",
+        "internationalization"
+    ],
+    "authors": [
+        {
+            "name": "Seifeddine Gmati",
+            "email": "azjezz@carthage.software"
+        },
+        {
+            "name": "Contributors",
+            "homepage": "https://github.com/php-standard-library/php-standard-library/graphs/contributors"
+        }
+    ],
+    "homepage": "https://php-standard-library.dev",
+    "require": {
+        "php": "~8.4.0 || ~8.5.0",
+        "ext-intl": "*"
+    },
+    "require-dev": {
+        "php-standard-library/str": "^6.0",
+        "phpunit/phpunit": "^13.0"
+    },
+    "conflict": {
+        "azjezz/psl": "*"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Psl\\Locale\\": "src/Psl/Locale/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Psl\\Locale\\Tests\\Unit\\": "tests/unit/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-next": "6.2.x-dev"
+        }
+    }
+}

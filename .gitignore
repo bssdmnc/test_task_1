@@ -1,0 +1,29 @@
+# phpstorm project files
+.idea
+
+# vs code project files
+.vscode
+
+# composer vendor dir
+/vendor/
+
+# composer.lock for packages
+/packages/*/composer.lock
+
+# Mac DS_Store files
+.DS_Store
+
+# php-cs-fixer cache
+/.php_cs.cache
+/.php-cs-fixer.cache
+/.phpbench
+
+# phpunit cache
+/config/.phpunit.result.cache
+/packages/*/.phpunit.result.cache
+
+# mago binary
+mago
+
+# generated documentation site
+/docs/dist/

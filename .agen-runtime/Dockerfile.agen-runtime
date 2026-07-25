@@ -16,4 +16,7 @@ ENV COMPOSER_MEMORY_LIMIT=-1
 
 RUN composer install --no-interaction --no-progress
 
+# Regenerate autoload so newly-added dev namespaces (e.g. tests/fixture) resolve.
+RUN composer dump-autoload --no-interaction
+
 CMD ["sh", "-c", "php -dmemory_limit=-1 ./vendor/bin/phpunit -c config/phpunit.xml.dist"]

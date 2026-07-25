@@ -85,8 +85,8 @@ Covered scenarios:
 ## Commit Structure
 
 ```
-9dcb6be [base]: php-standard-library snapshot before PR #740
-7e8958d [sol]: add io handle decorators, test fixtures, and autoload wiring
-3cb1dcf [f2p]: add fail-to-pass io handle tests
-<next> [meta]: metadata.json + task docs
+8aa52a6 feat(io): add composable handle decorators ...
+e36f571 [sol]: add io handle decorators, test fixtures, and autoload wiring
+1ff9853 [f2p]: add fail-to-pass io handle tests
+ed4f54b [meta]: metadata.json + task docs
 ```

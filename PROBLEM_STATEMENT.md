@@ -107,7 +107,7 @@ Key files and code locations:
 
 | SHA | Type | Message |
 |-----|------|---------|
-| `9dcb6be` | base | php-standard-library snapshot before PR #740 |
-| `7e8958d59bfe23a6778f00efa672dbc64b92e1bc` | [sol] | add io handle decorators, test fixtures, and autoload wiring |
-| `3cb1dcf0cf113e1f935156f010e0e372dacec336` | [f2p] | add fail-to-pass io handle tests |
-| `<meta-sha>` | [meta] | metadata.json + task docs |
+| `8aa52a6a5598c809c6b79591d292e43c4931ecac` | base | php-standard-library snapshot before PR #740 |
+| `e36f571b907a8cd50fbe1272140a547ebd5bf084` | [sol] | add io handle decorators, test fixtures, and autoload wiring |
+| `1ff9853114f737bf8ddc0186b25b0ad179f7677a` | [f2p] | add fail-to-pass io handle tests |
+| `ed4f54b5100ac15e0ec9c62349a5410fb0bcd64e` | [meta] | metadata.json + task docs |

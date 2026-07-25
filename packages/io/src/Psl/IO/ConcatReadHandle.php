@@ -95,6 +95,10 @@ final class ConcatReadHandle implements ReadHandleInterface, CloseHandleInterfac
      * Delegates to the first handle until it reaches EOF, then switches to the second
      * handle. Returns an empty string when both handles are exhausted (EOF).
      *
+     * Note: this is strict sequential reading — when the first handle returns an
+     * empty string but is not yet at EOF, the second handle is never peeked.
+     * Callers must drain the first handle completely before the second can be read.
+     *
      * @param null|positive-int $maxBytes Maximum number of bytes to return, or null for the entire chunk.
      *
      * @throws Exception\AlreadyClosedException If the handle has been closed.
@@ -143,11 +147,16 @@ final class ConcatReadHandle implements ReadHandleInterface, CloseHandleInterfac
     /**
      * Close the handle and both underlying handles (if they implement {@see CloseHandleInterface}).
      *
+     * Idempotent: subsequent calls are a no-op and do not re-close the underlying handles.
      * After closing, all read operations will throw {@see Exception\AlreadyClosedException}.
      */
     #[Override]
     public function close(): void
     {
+        if ($this->closed) {
+            return;
+        }
+
         $this->closed = true;
 
         if ($this->first instanceof CloseHandleInterface) {

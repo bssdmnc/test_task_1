@@ -60,6 +60,11 @@ final class TeeWriteHandle implements BufferedWriteHandleInterface, CloseHandleI
      * accepts fewer bytes than {@see $first}, the remainder is stored in the
      * pending buffer for future draining.
      *
+     * Note: when {@see $first} returns 0 (full backpressure on the primary),
+     * {@see $second} is intentionally NOT probed — that would risk
+     * silently consuming its pending data without an accompanying write to
+     * the primary, desynchronising the two handles.
+     *
      * @throws Exception\AlreadyClosedException If the handle has been closed.
      * @throws Exception\RuntimeException If an error occurred during the operation.
      *
@@ -126,6 +131,7 @@ final class TeeWriteHandle implements BufferedWriteHandleInterface, CloseHandleI
         return $firstN;
     }
 
+    #[Override]
     public function flush(CancellationTokenInterface $cancellation = new NullCancellationToken()): void
     {
         $this->assertHandleIsOpen();
@@ -150,15 +156,20 @@ final class TeeWriteHandle implements BufferedWriteHandleInterface, CloseHandleI
     /**
      * Close the handle, closing both underlying handles and clearing the pending buffer.
      *
-     * If either underlying handle implements {@see CloseHandleInterface}, it
-     * will be closed. The pending buffer is discarded. After closing, all
-     * operations will throw {@see Exception\AlreadyClosedException}.
+     * Idempotent: subsequent calls are a no-op and do not re-close the underlying
+     * handles. If either underlying handle implements {@see CloseHandleInterface},
+     * it will be closed on the first invocation. The pending buffer is discarded.
+     * After closing, all operations will throw {@see Exception\AlreadyClosedException}.
      *
      * @throws Exception\RuntimeException If an error occurred while closing one of the handles.
      */
     #[Override]
     public function close(): void
     {
+        if ($this->closed) {
+            return;
+        }
+
         $this->closed = true;
         $this->pendingForSecond = '';
 

@@ -58,6 +58,7 @@ final class SinkWriteHandle implements BufferedWriteHandleInterface, CloseHandle
         return $this->tryWrite($bytes);
     }
 
+    #[Override]
     public function flush(CancellationTokenInterface $cancellation = new NullCancellationToken()): void
     {
         $this->assertHandleIsOpen();
@@ -77,11 +78,17 @@ final class SinkWriteHandle implements BufferedWriteHandleInterface, CloseHandle
     /**
      * Close the handle.
      *
+     * Idempotent: subsequent calls are a no-op.
+     *
      * @psalm-external-mutation-free
      */
     #[Override]
     public function close(): void
     {
+        if ($this->closed) {
+            return;
+        }
+
         $this->closed = true;
     }
 

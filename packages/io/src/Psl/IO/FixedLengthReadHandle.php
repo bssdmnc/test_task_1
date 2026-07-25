@@ -49,6 +49,8 @@ final class FixedLengthReadHandle implements ReadHandleInterface, CloseHandleInt
     /**
      * @param ReadHandleInterface $handle The underlying handle to read from.
      * @param non-negative-int $length The exact number of bytes expected from the underlying handle.
+     *                                   A length of `0` immediately reports EOF without touching
+     *                                   the underlying handle.
      */
     public function __construct(
         private readonly ReadHandleInterface $handle,
@@ -192,8 +194,9 @@ final class FixedLengthReadHandle implements ReadHandleInterface, CloseHandleInt
     /**
      * Close the handle.
      *
-     * If the underlying handle implements {@see CloseHandleInterface}, it will
-     * also be closed. After closing, all read operations will throw
+     * Idempotent: subsequent calls are a no-op and do not re-close the underlying handle.
+     * If the underlying handle implements {@see CloseHandleInterface}, it will be closed
+     * on the first invocation. After closing, all read operations will throw
      * {@see Exception\AlreadyClosedException}.
      *
      * @throws Exception\RuntimeException If unable to close the underlying handle.
@@ -201,6 +204,10 @@ final class FixedLengthReadHandle implements ReadHandleInterface, CloseHandleInt
     #[Override]
     public function close(): void
     {
+        if ($this->closed) {
+            return;
+        }
+
         $this->closed = true;
 
         if ($this->handle instanceof CloseHandleInterface) {

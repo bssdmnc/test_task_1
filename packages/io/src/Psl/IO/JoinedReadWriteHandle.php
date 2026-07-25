@@ -11,9 +11,14 @@ use Psl\Async\NullCancellationToken;
 /**
  * A handle that joins a separate reader and writer into a single read-write handle.
  *
- * All read operations ({@see read()}, {@see tryRead()}, {@see reachedEndOfDataSource()})
- * are delegated to the underlying {@see ReadHandleInterface}, while all write operations
- * ({@see write()}, {@see tryWrite()}) are delegated to the underlying {@see WriteHandleInterface}.
+ * All read operations ({@see read()}, {@see tryRead()}, {@see reachedEndOfDataSource()},
+ * {@see readAll()}, {@see readFixedSize()}) are delegated to the underlying
+ * {@see ReadHandleInterface}, while all write operations ({@see write()},
+ * {@see tryWrite()}, {@see writeAll()}, {@see flush()}) are delegated to the
+ * underlying {@see WriteHandleInterface}.
+ *
+ * {@see flush()} forwards to the underlying writer only if it implements
+ * {@see BufferedWriteHandleInterface}; otherwise it is a no-op.
  *
  * When {@see close()} is called, both underlying handles are closed if they implement
  * {@see CloseHandleInterface}. After closing, all operations will throw
@@ -26,6 +31,9 @@ use Psl\Async\NullCancellationToken;
  */
 final class JoinedReadWriteHandle implements ReadHandleInterface, BufferedWriteHandleInterface, CloseHandleInterface
 {
+    use ReadHandleConvenienceMethodsTrait;
+    use WriteHandleConvenienceMethodsTrait;
+
     private bool $closed = false;
 
     /**
@@ -131,66 +139,15 @@ final class JoinedReadWriteHandle implements ReadHandleInterface, BufferedWriteH
     }
 
     /**
-     * Read all remaining data from the underlying reader.
+     * Flush any buffered output on the underlying writer.
      *
-     * Delegates to {@see ReadHandleInterface::readAll()} on the reader, preserving
-     * any optimized implementation the reader may provide.
-     *
-     * @param null|positive-int $maxBytes Maximum number of bytes to read, or null for no limit.
+     * Forwards to the writer only if it implements {@see BufferedWriteHandleInterface};
+     * otherwise this is a no-op.
      *
      * @throws Exception\AlreadyClosedException If the handle has been closed.
-     * @throws Exception\RuntimeException If an error occurred during the operation.
+     * @throws Exception\RuntimeException If the underlying flush fails.
      */
     #[Override]
-    public function readAll(
-        null|int $maxBytes = null,
-        CancellationTokenInterface $cancellation = new NullCancellationToken(),
-    ): string {
-        $this->assertHandleIsOpen();
-
-        return $this->reader->readAll($maxBytes, $cancellation);
-    }
-
-    /**
-     * Read a fixed number of bytes from the underlying reader.
-     *
-     * Delegates to {@see ReadHandleInterface::readFixedSize()} on the reader, preserving
-     * any optimized implementation the reader may provide.
-     *
-     * @param positive-int $size The exact number of bytes to read.
-     *
-     * @throws Exception\AlreadyClosedException If the handle has been closed.
-     * @throws Exception\RuntimeException If an error occurred during the operation or fewer bytes are available.
-     */
-    #[Override]
-    public function readFixedSize(
-        int $size,
-        CancellationTokenInterface $cancellation = new NullCancellationToken(),
-    ): string {
-        $this->assertHandleIsOpen();
-
-        return $this->reader->readFixedSize($size, $cancellation);
-    }
-
-    /**
-     * Write all bytes to the underlying writer, retrying until all data is written.
-     *
-     * Delegates to {@see WriteHandleInterface::writeAll()} on the writer, preserving
-     * any optimized implementation the writer may provide.
-     *
-     * @throws Exception\AlreadyClosedException If the handle has been closed.
-     * @throws Exception\RuntimeException If an error occurred during the operation.
-     */
-    #[Override]
-    public function writeAll(
-        string $bytes,
-        CancellationTokenInterface $cancellation = new NullCancellationToken(),
-    ): void {
-        $this->assertHandleIsOpen();
-
-        $this->writer->writeAll($bytes, $cancellation);
-    }
-
     public function flush(CancellationTokenInterface $cancellation = new NullCancellationToken()): void
     {
         $this->assertHandleIsOpen();
@@ -212,6 +169,7 @@ final class JoinedReadWriteHandle implements ReadHandleInterface, BufferedWriteH
     /**
      * Close the handle, closing both the underlying reader and writer if they implement {@see CloseHandleInterface}.
      *
+     * Idempotent: subsequent calls are a no-op and do not re-close the underlying handles.
      * After closing, all read and write operations will throw {@see Exception\AlreadyClosedException}.
      *
      * @throws Exception\RuntimeException If unable to close one of the underlying handles.
@@ -219,6 +177,10 @@ final class JoinedReadWriteHandle implements ReadHandleInterface, BufferedWriteH
     #[Override]
     public function close(): void
     {
+        if ($this->closed) {
+            return;
+        }
+
         $this->closed = true;
 
         if ($this->reader instanceof CloseHandleInterface) {

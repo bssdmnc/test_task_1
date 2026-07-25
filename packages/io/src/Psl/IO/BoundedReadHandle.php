@@ -40,6 +40,8 @@ final class BoundedReadHandle implements ReadHandleInterface, CloseHandleInterfa
      * @param ReadHandleInterface $handle The underlying handle to read from.
      * @param int $limit The maximum total number of bytes allowed. If the underlying
      *  handle contains more data, an {@see Exception\RuntimeException} is thrown.
+     *  A limit of `0` immediately reports EOF; passing data through a non-empty
+     *  underlying handle raises {@see Exception\RuntimeException}.
      */
     public function __construct(
         private readonly ReadHandleInterface $handle,
@@ -148,19 +150,22 @@ final class BoundedReadHandle implements ReadHandleInterface, CloseHandleInterfa
     /**
      * Close the handle.
      *
-     * If the underlying handle implements {@see CloseHandleInterface}, it will be
-     * closed as well. After closing, all read operations will throw
+     * Idempotent: subsequent calls are a no-op and do not re-close the underlying handle.
+     * If the underlying handle implements {@see CloseHandleInterface}, it will be closed
+     * on the first invocation. After closing, all read operations will throw
      * {@see Exception\AlreadyClosedException}.
      */
     #[Override]
     public function close(): void
     {
-        if (!$this->closed) {
-            $this->closed = true;
+        if ($this->closed) {
+            return;
+        }
 
-            if ($this->handle instanceof CloseHandleInterface) {
-                $this->handle->close();
-            }
+        $this->closed = true;
+
+        if ($this->handle instanceof CloseHandleInterface) {
+            $this->handle->close();
         }
     }
 

@@ -90,11 +90,16 @@ final class SinkReadHandle implements ReadHandleInterface, CloseHandleInterface
     /**
      * Close the handle.
      *
-     * After closing, all operations will throw {@see Exception\AlreadyClosedException}.
+     * Idempotent: subsequent calls are a no-op. After closing, all operations
+     * will throw {@see Exception\AlreadyClosedException}.
      */
     #[Override]
     public function close(): void
     {
+        if ($this->closed) {
+            return;
+        }
+
         $this->closed = true;
     }
 

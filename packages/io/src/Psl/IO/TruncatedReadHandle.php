@@ -35,6 +35,8 @@ final class TruncatedReadHandle implements ReadHandleInterface, CloseHandleInter
     /**
      * @param ReadHandleInterface $handle The underlying handle to read from.
      * @param int $limit The maximum total number of bytes to read from the underlying handle.
+     *                   A limit of `0` immediately reports EOF without touching the
+     *                   underlying handle.
      */
     public function __construct(
         private readonly ReadHandleInterface $handle,
@@ -139,13 +141,18 @@ final class TruncatedReadHandle implements ReadHandleInterface, CloseHandleInter
     /**
      * Close the handle.
      *
-     * If the underlying handle implements {@see CloseHandleInterface}, it will be
-     * closed as well. After closing, all read operations will throw
+     * Idempotent: subsequent calls are a no-op and do not re-close the underlying handle.
+     * If the underlying handle implements {@see CloseHandleInterface}, it will be closed
+     * on the first invocation. After closing, all read operations will throw
      * {@see Exception\AlreadyClosedException}.
      */
     #[Override]
     public function close(): void
     {
+        if ($this->closed) {
+            return;
+        }
+
         $this->closed = true;
 
         if ($this->handle instanceof CloseHandleInterface) {

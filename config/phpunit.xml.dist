@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../vendor/phpunit/phpunit/phpunit.xsd"
+    colors="true"
+    stopOnFailure="false"
+    displayDetailsOnAllIssues="true"
+    bootstrap="../vendor/autoload.php"
+>
+  <source>
+    <include>
+      <directory suffix=".php">../packages/*/src</directory>
+    </include>
+    <exclude>
+      <!-- Bootstrap files (function loaders, not logic) -->
+      <directory suffix="bootstrap.php">../packages</directory>
+
+      <!-- Base Exceptions -->
+      <directory>../packages/foundation/src/Psl/Exception</directory>
+
+      <!-- Constants -->
+      <file>../packages/h2/src/Psl/H2/constants.php</file>
+      <file>../packages/http-message/src/Psl/HTTP/Message/constants.php</file>
+      <file>../packages/mime/src/Psl/MIME/Sniff/Internal/constants.php</file>
+      <file>../packages/str/src/Psl/Str/constants.php</file>
+      <file>../packages/str/src/Psl/Str/Internal/constants.php</file>
+      <file>../packages/math/src/Psl/Math/constants.php</file>
+      <file>../packages/filesystem/src/Psl/Filesystem/constants.php</file>
+      <file>../packages/crypto/src/Psl/Crypto/Signing/constants.php</file>
+      <file>../packages/crypto/src/Psl/Crypto/KeyExchange/constants.php</file>
+      <file>../packages/crypto/src/Psl/Crypto/Kdf/constants.php</file>
+      <file>../packages/crypto/src/Psl/Crypto/Asymmetric/constants.php</file>
+      <file>../packages/crypto/src/Psl/Crypto/Aead/constants.php</file>
+      <file>../packages/crypto/src/Psl/Crypto/Symmetric/constants.php</file>
+      <file>../packages/crypto/src/Psl/Crypto/StreamCipher/constants.php</file>
+
+      <!-- Things that are not easily tested -->
+      <file>../packages/filesystem/src/Psl/Filesystem/get_group.php</file>
+      <file>../packages/filesystem/src/Psl/Filesystem/change_group.php</file>
+      <file>../packages/filesystem/src/Psl/Filesystem/get_owner.php</file>
+      <file>../packages/filesystem/src/Psl/Filesystem/change_owner.php</file>
+
+      <!-- Terminal internals require a real terminal -->
+      <directory>../packages/terminal/src/Psl/Terminal/Internal</directory>
+      <file>../packages/terminal/src/Psl/Terminal/Application.php</file>
+    </exclude>
+  </source>
+  <php>
+    <ini name="error_reporting" value="-1" />
+    <ini name="precision" value="16" />
+  </php>
+  <testsuites>
+    <testsuite name="PHP Standard Library">
+      <directory>../packages/*/tests/unit</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>

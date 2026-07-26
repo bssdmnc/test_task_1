@@ -111,7 +111,13 @@ Key files and code locations:
 | `9dcb6be` | base | php-standard-library snapshot before PR #740 |
 | `7e8958d59bfe23a6778f00efa672dbc64b92e1bc` | [sol] | add io handle decorators, test fixtures, and autoload wiring |
 | `3cb1dcf0cf113e1f935156f010e0e372dacec336` | [f2p] | add fail-to-pass io handle tests |
-| `<meta-sha>` | [meta] | metadata.json + task docs |","","",php-standard-library,public,MIT,https://github.com/php-standard-library/php-standard-library,"packages/io/tests/unit/BoundedReadHandleTest.php,packages/io/tests/unit/ConcatReadHandleTest.php,packages/io/tests/unit/FixedLengthReadHandleTest.php,packages/io/tests/unit/JoinedReadWriteHandleTest.php,packages/io/tests/unit/SinkReadHandleTest.php,packages/io/tests/unit/SinkReadWriteHandleTest.php,packages/io/tests/unit/SinkWriteHandleTest.php,packages/io/tests/unit/TeeWriteHandleTest.php,packages/io/tests/unit/TruncatedReadHandleTest.php","packages/io/tests/unit/StreamTest.php,packages/io/tests/unit/SpoolTest.php,packages/io/tests/unit/ReaderTest.php,packages/io/tests/unit/PipeTest.php,packages/io/tests/unit/MemoryHandleTest.php,packages/io/tests/unit/IterableReadHandleTest.php,packages/io/tests/unit/CopyTest.php,packages/io/tests/unit/CopyBidirectionalTest.php",PHP,,"FROM php:8.4-cli
+| `<meta-sha>` | [meta] | metadata.json + task docs |","We need to add reusable wrapper classes for IO stream handles in the PHP Standard Library. Currently there is no standard way to concatenate two readers, limit how many bytes can be read, mirror writes to two destinations, or create a no-op /dev/null handle. These patterns are reimplemented ad hoc in different parts of the codebase. Add a set of composable decorator classes under packages/io/src/Psl/IO/ that implement the existing ReadHandleInterface, WriteHandleInterface, and ReadWriteHandleInterface contracts. Each decorator must be final, handle close/closed-state correctly, and throw AlreadyClosedException after close. Include comprehensive unit tests covering normal operation, edge cases (empty handles, zero-length reads, premature EOF), and close semantics.","Key files and code locations:
+- packages/io/src/Psl/IO/ReadHandleInterface.php
+- packages/io/src/Psl/IO/WriteHandleInterface.php
+- packages/io/src/Psl/IO/ReadHandleConvenienceMethodsTrait.php
+- packages/io/src/Psl/IO/WriteHandleConvenienceMethodsTrait.php
+- packages/io/src/Psl/IO/MemoryHandle.php
+- packages/io/src/Psl/IO/IterableReadHandle.php",php-standard-library,public,MIT,https://github.com/php-standard-library/php-standard-library,"packages/io/tests/unit/BoundedReadHandleTest.php,packages/io/tests/unit/ConcatReadHandleTest.php,packages/io/tests/unit/FixedLengthReadHandleTest.php,packages/io/tests/unit/JoinedReadWriteHandleTest.php,packages/io/tests/unit/SinkReadHandleTest.php,packages/io/tests/unit/SinkReadWriteHandleTest.php,packages/io/tests/unit/SinkWriteHandleTest.php,packages/io/tests/unit/TeeWriteHandleTest.php,packages/io/tests/unit/TruncatedReadHandleTest.php","packages/io/tests/unit/StreamTest.php,packages/io/tests/unit/SpoolTest.php,packages/io/tests/unit/ReaderTest.php,packages/io/tests/unit/PipeTest.php,packages/io/tests/unit/MemoryHandleTest.php,packages/io/tests/unit/IterableReadHandleTest.php,packages/io/tests/unit/CopyTest.php,packages/io/tests/unit/CopyBidirectionalTest.php",PHP,,"FROM php:8.4-cli
 
 SHELL [""/bin/bash"", ""-o"", ""pipefail"", ""-c""]
 
@@ -133,7 +139,7 @@ ENV COMPOSER_MEMORY_LIMIT=-1
 RUN composer install --no-interaction --no-progress
 
 CMD php -dmemory_limit=-1 ./vendor/bin/phpunit -c config/phpunit.xml.dist
-",8aa52a6a5598c809c6b79591d292e43c4931ecac,e36f571b907a8cd50fbe1272140a547ebd5bf084,1ff9853114f737bf8ddc0186b25b0ad179f7677a,"#!/usr/bin/env bash
+",50a2c5c9b3e824f9cbb3dc8028dbc99d7102eca4,ba52616adf432e4a15d3568bcac8872d3347a050,c7eabd1186ac455208fbd17631253e929befae77,"#!/usr/bin/env bash
 set -euo pipefail
 
 SCRIPT_DIR=""$(cd ""$(dirname ""${BASH_SOURCE[0]}"")"" && pwd)""
@@ -455,4 +461,4 @@ else
     info ""========================""
     eval ""$TARGETED""
 fi
-",io,standard-library,git reset --hard 8aa52a6a5598c809c6b79591d292e43c4931ecac,1,4g,4g,FALSE,standard,,,,,,,,,,
+",io,standard-library,git reset --hard 50a2c5c9b3e824f9cbb3dc8028dbc99d7102eca4,1,4g,4g,FALSE,standard,,,,,,,,,,

@@ -1,0 +1,22 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Psl\Str;
+
+/**
+ * @throws Exception\OutOfBoundsException If the $offset is out-of-bounds.
+ *
+ * @pure
+ */
+function after(string $haystack, string $needle, int $offset = 0, Encoding $encoding = Encoding::Utf8): null|string
+{
+    $position = namespace\search($haystack, $needle, $offset, $encoding);
+    if (null === $position) {
+        return null;
+    }
+
+    $position += namespace\length($needle);
+
+    return namespace\slice($haystack, $position, null, $encoding);
+}

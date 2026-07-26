@@ -1,5 +1,9 @@
 # AGENTS.md
 
+## Goal
+
+See [PROBLEM_STATEMENT.md](./PROBLEM_STATEMENT.md) for the full task specification.
+
 ## Project
 
 PHP Standard Library (PSL) — composable IO handle decorators for `ReadHandleInterface`, `WriteHandleInterface`, and `ReadWriteHandleInterface`.
@@ -14,14 +18,24 @@ baac32f feat: add README_EN.md for task evaluation and deliverables (master)
                     └── 0b18061 [meta]: metadata.json + task docs
 ```
 
-## Commit Convention
+## Commit Convention (Strict Order)
 
-| Prefix | Content |
-|--------|---------|
-| `feat(io):` | Base snapshot of the library |
-| `[sol]` | Solution code: source files, fixtures, config, autoload |
-| `[f2p]` | Tests: F2P (fail on base, pass after [sol]) + P2P (pass always) |
-| `[meta]` | Metadata: metadata.json, metadata.csv, Dockerfile, test_task |
+| Commit | Prefix | Contents |
+|--------|--------|----------|
+| base | `feat(io):` | php-standard-library snapshot before PR #740 |
+| [sol] | `[sol]:` | Isolated solution code (no tests or extraneous changes) |
+| [f2p] | `[f2p]:` | Tests: F2P (fail on base, pass after [sol]) + P2P (pass always) |
+| [meta] | `[meta]:` | metadata.json, metadata.csv, Dockerfile, test_task |
+
+## Deliverables Checklist
+
+- [ ] Golden solution on `golden-solution` branch
+- [ ] F2P tests (Fail-to-Pass)
+- [ ] P2P tests (Pass-to-Pass)
+- [ ] PROBLEM_STATEMENT.md
+- [ ] PR_DESCRIPTION.md
+- [ ] base/.agen-runtime/metadata.json (filled)
+- [ ] base/metadata.csv (filled)
 
 ## Running Tests
 
@@ -58,3 +72,12 @@ docker run --rm golden-solution-test
 - StreamTest.php, SpoolTest.php, ReaderTest.php, PipeTest.php
 - MemoryHandleTest.php, IterableReadHandleTest.php
 - CopyTest.php, CopyBidirectionalTest.php
+
+## Acceptance Criteria
+
+- Agent can reproduce change from problem_statement + base only
+- Docker builds and runs tests
+- F2P: fail → pass transition
+- P2P: pass both before and after
+- Problem statement is self-contained
+- No flaky/non-deterministic tests

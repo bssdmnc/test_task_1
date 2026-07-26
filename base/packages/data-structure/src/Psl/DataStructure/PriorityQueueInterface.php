@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Psl\DataStructure;
+
+use Override;
+
+/**
+ * @template T
+ *
+ * @extends QueueInterface<T>
+ */
+interface PriorityQueueInterface extends QueueInterface
+{
+    /**
+     * Adds a node to the queue.
+     *
+     * @param T $node
+     */
+    #[Override]
+    public function enqueue(mixed $node, int $priority = 0): void;
+}

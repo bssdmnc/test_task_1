@@ -57,7 +57,11 @@ for cls in ConcatReadHandle FixedLengthReadHandle BoundedReadHandle TruncatedRea
     [[ -f "$OUT/packages/io/src/Psl/IO/$cls.php" ]] && { echo "LEAK: $cls.php present in base"; LEAK=1; }
     [[ -f "$OUT/packages/io/tests/unit/${cls}Test.php" ]] && { echo "LEAK: ${cls}Test.php present in base"; LEAK=1; }
 done
-for forbidden in README.md README_EN.md IDEA.md ORIGINAL_TASK.md ORIGINAL_TASK_EN.md PR_DESCRIPTION.md metadata.csv test_task; do
+# Note: README.md is intentionally NOT checked here — base/README.md is the
+# monorepo's own (legitimate) README, not the task-bundle's authoring doc.
+# The latter is never copied into $OUT by construction, so checking for it
+# would either miss the real leak vector or false-positive on the former.
+for forbidden in README_EN.md IDEA.md ORIGINAL_TASK.md ORIGINAL_TASK_EN.md PR_DESCRIPTION.md metadata.csv test_task; do
     [[ -e "$OUT/$forbidden" ]] && { echo "LEAK: authoring-only $forbidden present at fixture root"; LEAK=1; }
 done
 (( LEAK == 0 )) || die "leakage check failed — see above"

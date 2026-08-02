@@ -1,0 +1,10 @@
+# Shell scripts and Dockerfiles are executed inside Linux containers. A CRLF
+# checkout on Windows makes them unrunnable there ("set: pipefail: invalid
+# option name"), so pin them to LF regardless of the platform or core.autocrlf.
+*.sh            text eol=lf
+Dockerfile*     text eol=lf
+*.dockerfile    text eol=lf
+
+# The dataset row embeds whole file contents; stray CRs would end up inside
+# quoted CSV fields and travel downstream into the evaluation harness.
+metadata.csv    text eol=lf

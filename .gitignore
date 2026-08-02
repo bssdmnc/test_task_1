@@ -1,0 +1,14 @@
+.idea/.gitignore
+.idea/modules.xml
+.idea/php.xml
+.idea/phpunit.xml
+.idea/task.iml
+.idea/vcs.xml
+.commandcode/
+.hermes/plans/
+
+# Compliance-harness local state (authoring-side only)
+test_task/.venv/
+test_task/.pytest_cache/
+__pycache__/
+*.pyc

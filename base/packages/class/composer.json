@@ -1,0 +1,51 @@
+{
+    "name": "php-standard-library/class",
+    "description": "Type-safe wrappers around PHP class reflection and existence checks",
+    "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "class",
+        "reflection"
+    ],
+    "authors": [
+        {
+            "name": "Seifeddine Gmati",
+            "email": "azjezz@carthage.software"
+        },
+        {
+            "name": "Contributors",
+            "homepage": "https://github.com/php-standard-library/php-standard-library/graphs/contributors"
+        }
+    ],
+    "homepage": "https://php-standard-library.dev",
+    "require": {
+        "php": "~8.4.0 || ~8.5.0"
+    },
+    "require-dev": {
+        "php-standard-library/collection": "^6.0",
+        "php-standard-library/type": "^6.0",
+        "phpunit/phpunit": "^13.0"
+    },
+    "conflict": {
+        "azjezz/psl": "*"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Psl\\Class\\": "src/Psl/Class/"
+        },
+        "files": [
+            "src/Psl/bootstrap.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Psl\\Class\\Tests\\Unit\\": "tests/unit/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-next": "6.2.x-dev"
+        }
+    }
+}

@@ -1,0 +1,48 @@
+php-version = "8.4"
+
+[source]
+paths = ["packages", "splitter", "tests", "examples", "docs"]
+includes = ["vendor/revolt"]
+excludes = ["splitter/vendor", "*/packages/**/vendor/*"]
+
+[formatter]
+null-type-hint = "pipe"
+empty-line-after-control-structure = true
+empty-line-before-dangling-comments = false
+indent-heredoc = false
+
+[linter]
+integrations = ["php-unit"]
+
+[linter.rules]
+ambiguous-function-call = { enabled = true }
+cyclomatic-complexity = { threshold = 48 }
+kan-defect = { threshold = 3.5 }
+halstead = { enabled = false }
+too-many-methods = { enabled = false }
+too-many-enum-cases = { enabled = false }
+excessive-parameter-list = { threshold = 9 }
+excessive-nesting = { threshold = 5 }
+trait-name = { psr = false }
+interface-name = { psr = false }
+class-name = { psr = false }
+no-global = { enabled = false }
+literal-named-argument = { enabled = false }
+no-boolean-flag-parameter = { enabled = false }
+no-error-control-operator = { enabled = false }
+no-redundant-use = { enabled = true }
+no-isset = { enabled = false }
+single-class-per-file = { exclude = ["packages/comparison/tests/", "examples", "docs"] }
+file-name = { exclude = ["examples", "docs"] }
+no-else-clause = { enabled = false }
+
+[analyzer]
+excludes = ["*/packages/**/tests/*"]
+ignore = [
+  { code = "possibly-static-access-on-interface", in = "packages/" },
+  { code = "unused-statement", in = ["docs"] },
+  { code = "duplicate-definition", in = "docs" },
+  { code = "redundant-type-comparison", in = "docs" },
+]
+plugins = ["php-standard-library"]
+strict-list-index-checks = true

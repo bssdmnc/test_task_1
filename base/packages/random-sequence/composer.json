@@ -1,0 +1,49 @@
+{
+    "name": "php-standard-library/random-sequence",
+    "description": "Object-oriented random number sequences with injectable, seedable implementations",
+    "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "random",
+        "sequence",
+        "seedable"
+    ],
+    "authors": [
+        {
+            "name": "Seifeddine Gmati",
+            "email": "azjezz@carthage.software"
+        },
+        {
+            "name": "Contributors",
+            "homepage": "https://github.com/php-standard-library/php-standard-library/graphs/contributors"
+        }
+    ],
+    "homepage": "https://php-standard-library.dev",
+    "require": {
+        "php": "~8.4.0 || ~8.5.0",
+        "php-standard-library/default": "^6.0",
+        "php-standard-library/secure-random": "^6.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^13.0"
+    },
+    "conflict": {
+        "azjezz/psl": "*"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Psl\\RandomSequence\\": "src/Psl/RandomSequence/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Psl\\RandomSequence\\Tests\\Unit\\": "tests/unit/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-next": "6.2.x-dev"
+        }
+    }
+}

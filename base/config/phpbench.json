@@ -1,0 +1,16 @@
+{
+    "runner.annotations":     false,
+    "runner.attributes":      true,
+    "runner.bootstrap":       "../vendor/autoload.php",
+    "runner.file_pattern":    "*Bench.php",
+    "runner.iterations":      2,
+    "runner.revs":            3,
+    "runner.path":            "../packages",
+    "runner.retry_threshold": 5,
+    "runner.warmup":          1,
+    "report.outputs":         {
+        "report": {
+            "extends": "aggregate"
+        }
+    }
+}

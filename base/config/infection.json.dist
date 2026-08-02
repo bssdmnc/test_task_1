@@ -1,0 +1,170 @@
+{
+    "phpUnit": {
+        "customPath": "../vendor/bin/phpunit"
+    },
+    "initialTestsPhpOptions": "-dopcache.enable=0",
+    "source": {
+        "directories": [
+            "../packages"
+        ],
+        "excludes": [
+            "random-sequence",
+            "async",
+            "io",
+            "unix",
+            "tcp",
+            "tls",
+            "udp",
+            "process",
+            "terminal",
+            "encoding",
+            "foundation",
+            "{.*/Internal/.*}"
+        ]
+    },
+    "logs": {
+        "text": "php://stderr",
+        "github": true,
+        "stryker": {
+            "report": "/^(next|\\d+\\.\\d+\\.x)$/"
+        }
+    },
+    "timeout": 10,
+    "minMsi": 95,
+    "minCoveredMsi": 95,
+    "mutators": {
+        "@default": true,
+        "Break_": {
+            "ignore": [
+                "Psl\\Collection\\*Map::zip"
+            ]
+        },
+        "Catch_": {
+            "ignore": [
+                "Psl\\DateTime\\Interval::fromIso8601"
+            ]
+        },
+        "CastFloat": {
+            "ignore": [
+                "Psl\\DateTime\\DateTime::fromParts"
+            ]
+        },
+        "CastInt": {
+            "ignore": [
+                "Psl\\CIDR\\Block::__construct",
+                "Psl\\DateTime\\DateTime::fromStdlib",
+                "Psl\\DateTime\\DateTime::toStdlib",
+                "Psl\\DateTime\\DateTime::fromIntl",
+                "Psl\\DateTime\\Timestamp::fromStdlib"
+            ]
+        },
+        "CastString": {
+            "ignore": [
+                "Psl\\DateTime\\Duration::toString",
+                "Psl\\Locale\\Locale::default"
+            ]
+        },
+        "DecrementInteger": {
+            "ignore": [
+                "Psl\\Ansi\\Color\\Color::basic",
+                "Psl\\Ansi\\Color\\Color::ansi256",
+                "Psl\\Ansi\\Color\\Color::rgb",
+                "Psl\\CIDR\\Block::__construct",
+                "Psl\\DataStructure\\PriorityQueue::peek",
+                "Psl\\DateTime\\TemporalConvenienceMethodsTrait::since"
+            ]
+        },
+        "FunctionCallRemoval": {
+            "ignore": [
+                "Psl\\Result\\Success::getThrowable",
+                "Psl\\Crypto\\Asymmetric\\Encryptor::open"
+            ]
+        },
+        "GreaterThan": {
+            "ignore": [
+                "Psl\\CIDR\\Block::__construct",
+                "Psl\\DateTime\\Duration::toString"
+            ]
+        },
+        "GreaterThanOrEqualTo": {
+            "ignore": [
+                "Psl\\DateTime\\DateTime::__construct"
+            ]
+        },
+        "IncrementInteger": {
+            "ignore": [
+                "Psl\\Ansi\\Color\\Color::basic",
+                "Psl\\Ansi\\Color\\Color::ansi256",
+                "Psl\\Ansi\\Color\\Color::rgb",
+                "Psl\\CIDR\\Block::__construct",
+                "Psl\\DataStructure\\PriorityQueue::peek",
+                "Psl\\DateTime\\Period::between",
+                "Psl\\DateTime\\TemporalConvenienceMethodsTrait::since"
+            ]
+        },
+        "LogicalNot": {
+            "ignore": [
+                "Psl\\Hash\\Context::update"
+            ]
+        },
+        "LogicalOr": {
+            "ignore": [
+                "Psl\\DateTime\\DateTime::__construct"
+            ]
+        },
+        "Minus": {
+            "ignore": [
+                "Psl\\DateTime\\Period::between"
+            ]
+        },
+        "MethodCallRemoval": {
+            "ignore": [
+                "Psl\\Network\\CompositeListener::close",
+                "Psl\\Iter\\Iterator::seek",
+                "Psl\\Iter\\Iterator::count"
+            ]
+        },
+        "ReturnRemoval": {
+            "ignore": [
+                "Psl\\Network\\CompositeListener::close",
+                "Psl\\DataStructure\\PriorityQueue::peek",
+                "Psl\\DateTime\\DateTimeConvenienceMethodsTrait::plusMonths",
+                "Psl\\DateTime\\DateTimeConvenienceMethodsTrait::minusMonths",
+                "Psl\\DateTime\\Duration::minus",
+                "Psl\\DateTime\\Period::minus",
+                "Psl\\Iter\\Iterator::create",
+                "Psl\\Iter\\Iterator::seek",
+                "Psl\\Iter\\Iterator::count",
+                "Psl\\Binary\\HandleReader::skip",
+                "Psl\\Binary\\HandleReader::consume",
+                "Psl\\Binary\\ReaderConvenienceMethodsTrait::skip"
+            ]
+        },
+        "Throw_": {
+            "ignore": [
+                "Psl\\DateTime\\DateTime::__construct",
+                "Psl\\File\\ReadHandle::__construct",
+                "Psl\\File\\WriteHandle::__construct",
+                "Psl\\File\\ReadWriteHandle::__construct",
+                "Psl\\Hash\\Context::update"
+            ]
+        },
+        "TrueValue": {
+            "ignore": [
+                "Psl\\Graph\\DirectedGraph::hasCycle",
+                "Psl\\Graph\\UndirectedGraph::hasCycle"
+            ]
+        },
+        "UnwrapArrayKeys": {
+            "ignore": [
+                "Psl\\Collection\\Set::keys"
+            ]
+        },
+        "UnwrapFinally": {
+            "ignore": [
+                "Psl\\Crypto\\Asymmetric\\Encryptor::open",
+                "Psl\\Network\\CompositeListener::startAcceptLoop"
+            ]
+        }
+    }
+}

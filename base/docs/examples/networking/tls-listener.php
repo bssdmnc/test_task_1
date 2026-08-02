@@ -1,0 +1,35 @@
+<?php
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/../../../vendor/autoload.php';
+
+use Psl\Async;
+use Psl\IO;
+use Psl\TCP;
+use Psl\TLS;
+
+// Create a TLS listener wrapping a TCP listener
+$certificate = new TLS\Certificate('server.pem', 'server.key');
+$listener = new TLS\Listener(TCP\listen('127.0.0.1', 0), TLS\ServerConfiguration::create($certificate));
+
+$address = $listener->getLocalAddress();
+IO\write_line('TLS server listening on %s:%d', $address->host, $address->port ?? 0);
+
+// Simulate shutdown after 50ms
+$token = new Async\SignalCancellationToken();
+Async\Scheduler::delay(Psl\DateTime\Duration::milliseconds(50), static fn(string $_) => $token->cancel());
+
+while (true) {
+    try {
+        $stream = $listener->accept($token);
+
+        IO\write_line('Accepted TLS connection from %s', $stream->getPeerAddress()->host);
+
+        $stream->close();
+    } catch (Async\Exception\CancelledException) {
+        break;
+    }
+}
+
+$listener->close();

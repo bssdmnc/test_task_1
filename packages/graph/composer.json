@@ -1,0 +1,52 @@
+{
+    "name": "php-standard-library/graph",
+    "description": "Immutable directed and undirected graph data structures with BFS, DFS, topological sort, and cycle detection",
+    "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "graph",
+        "algorithm",
+        "bfs",
+        "dfs"
+    ],
+    "authors": [
+        {
+            "name": "Seifeddine Gmati",
+            "email": "azjezz@carthage.software"
+        },
+        {
+            "name": "Contributors",
+            "homepage": "https://github.com/php-standard-library/php-standard-library/graphs/contributors"
+        }
+    ],
+    "homepage": "https://php-standard-library.dev",
+    "require": {
+        "php": "~8.4.0 || ~8.5.0",
+        "php-standard-library/data-structure": "^6.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^13.0"
+    },
+    "conflict": {
+        "azjezz/psl": "*"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Psl\\Graph\\": "src/Psl/Graph/"
+        },
+        "files": [
+            "src/Psl/bootstrap.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Psl\\Graph\\Tests\\Unit\\": "tests/unit/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-next": "6.2.x-dev"
+        }
+    }
+}

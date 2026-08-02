@@ -1,0 +1,52 @@
+{
+    "name": "php-standard-library/either",
+    "description": "General-purpose disjoint union type (Left/Right) for values with two possible types",
+    "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "either",
+        "monad",
+        "union-type"
+    ],
+    "authors": [
+        {
+            "name": "Seifeddine Gmati",
+            "email": "azjezz@carthage.software"
+        },
+        {
+            "name": "Contributors",
+            "homepage": "https://github.com/php-standard-library/php-standard-library/graphs/contributors"
+        }
+    ],
+    "homepage": "https://php-standard-library.dev",
+    "require": {
+        "php": "~8.4.0 || ~8.5.0",
+        "php-standard-library/comparison": "^6.0",
+        "php-standard-library/foundation": "^6.0",
+        "php-standard-library/option": "^6.0",
+        "php-standard-library/result": "^6.0"
+    },
+    "require-dev": {
+        "php-standard-library/str": "^6.0",
+        "phpunit/phpunit": "^13.0"
+    },
+    "conflict": {
+        "azjezz/psl": "*"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Psl\\Either\\": "src/Psl/Either/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Psl\\Either\\Tests\\Unit\\": "tests/unit/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-next": "6.2.x-dev"
+        }
+    }
+}

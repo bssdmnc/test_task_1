@@ -1,0 +1,61 @@
+{
+    "name": "php-standard-library/type",
+    "description": "Runtime type validation implementing Parse, Don't Validate - coerce and assert unstructured input into well-typed data",
+    "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "type",
+        "validation",
+        "coercion",
+        "type-safety"
+    ],
+    "authors": [
+        {
+            "name": "Seifeddine Gmati",
+            "email": "azjezz@carthage.software"
+        },
+        {
+            "name": "Contributors",
+            "homepage": "https://github.com/php-standard-library/php-standard-library/graphs/contributors"
+        }
+    ],
+    "homepage": "https://php-standard-library.dev",
+    "require": {
+        "php": "~8.4.0 || ~8.5.0",
+        "ext-json": "*",
+        "php-standard-library/collection": "^6.0",
+        "php-standard-library/foundation": "^6.0",
+        "php-standard-library/iter": "^6.0"
+    },
+    "require-dev": {
+        "php-standard-library/dict": "^6.0",
+        "php-standard-library/math": "^6.0",
+        "php-standard-library/result": "^6.0",
+        "php-standard-library/str": "^6.0",
+        "php-standard-library/vec": "^6.0",
+        "phpunit/phpunit": "^13.0"
+    },
+    "conflict": {
+        "azjezz/psl": "*"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Psl\\Type\\": "src/Psl/Type/"
+        },
+        "files": [
+            "src/Psl/bootstrap.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Psl\\Type\\Tests\\Fixture\\": "tests/fixture/",
+            "Psl\\Type\\Tests\\Unit\\": "tests/unit/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-next": "6.2.x-dev"
+        }
+    }
+}

@@ -293,6 +293,7 @@
             "Psl\\HTTP\\Message\\Tests\\Unit\\": "packages/http-message/tests/unit/",
             "Psl\\Html\\Tests\\Unit\\": "packages/html/tests/unit/",
             "Psl\\IO\\Tests\\Benchmark\\": "packages/io/tests/benchmark/",
+            "Psl\\IO\\Tests\\Fixture\\": "packages/io/tests/fixture/",
             "Psl\\IO\\Tests\\Unit\\": "packages/io/tests/unit/",
             "Psl\\IP\\Tests\\Unit\\": "packages/ip/tests/unit/",
             "Psl\\IRI\\Tests\\Unit\\": "packages/iri/tests/unit/",
